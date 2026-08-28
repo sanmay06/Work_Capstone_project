@@ -1,0 +1,17 @@
+{
+  "name": "lending-library-testing",
+  "version": "1.0.0",
+  "description": "Playwright Test Automation Framework for Lending Library Frontend & APIs",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:frontend": "playwright test frontend/tests",
+    "test:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}

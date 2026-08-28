@@ -1,0 +1,25 @@
+<h2>My Fines</h2>
+
+@if (loading()) {
+  <p>Loading...</p>
+} @else if (errorMessage()) {
+  <p class="error">{{ errorMessage() }}</p>
+} @else if (fines().length === 0) {
+  <p>No fines on your account.</p>
+} @else {
+  <ul class="list">
+    @for (f of fines(); track f.id) {
+      <li>
+        <span class="reason">{{ f.reason }}</span>
+        <span class="amount">${{ f.amount }}</span>
+        <span class="status" [class]="f.status.toLowerCase()">{{ f.status }}</span>
+        @if (!f.paid) {
+          <button (click)="pay(f.id)">Mark Paid</button>
+          @if (auth.isStaffOrAdmin()) {
+            <button class="secondary" (click)="waive(f.id)">Waive</button>
+          }
+        }
+      </li>
+    }
+  </ul>
+}

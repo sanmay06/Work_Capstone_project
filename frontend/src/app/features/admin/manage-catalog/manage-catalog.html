@@ -1,0 +1,43 @@
+<div class="manage-catalog">
+  <h2>Manage Catalog</h2>
+
+  <section class="panel">
+    <h3>New Category</h3>
+    <form (ngSubmit)="submitCategory()">
+      <label>Name <input type="text" name="categoryName" [(ngModel)]="categoryName" required /></label>
+      <label>Max Loan Duration (days) <input type="number" name="maxLoanDurationDays" [(ngModel)]="maxLoanDurationDays" required /></label>
+      <label class="checkbox"><input type="checkbox" name="depositRequired" [(ngModel)]="depositRequired" /> Deposit Required</label>
+      <button type="submit">Create Category</button>
+    </form>
+    @if (categoryResult()) { <p>{{ categoryResult() }}</p> }
+    <ul>
+      @for (cat of categories(); track cat.id) {
+        <li>{{ cat.name }} — {{ cat.maxLoanDurationDays }} days{{ cat.depositRequired ? ' (deposit required)' : '' }}</li>
+      }
+    </ul>
+  </section>
+
+  <section class="panel wide">
+    <h3>New Item</h3>
+    <form (ngSubmit)="submitItem()">
+      <label>Name <input type="text" name="itemName" [(ngModel)]="itemName" required /></label>
+      <label>Description <input type="text" name="itemDescription" [(ngModel)]="itemDescription" /></label>
+      <label>Category
+        <select name="itemCategoryId" [(ngModel)]="itemCategoryId" required>
+          <option value="" disabled>Select a category</option>
+          @for (cat of categories(); track cat.id) {
+            <option [value]="cat.id">{{ cat.name }}</option>
+          }
+        </select>
+      </label>
+      <label>Asset Tag <input type="text" name="itemAssetTag" [(ngModel)]="itemAssetTag" required /></label>
+      <button type="submit">Create Item</button>
+    </form>
+    @if (itemResult()) { <p>{{ itemResult() }}</p> }
+    <ul>
+      @for (item of items(); track item.id) {
+        <li>{{ item.name }} ({{ item.assetTag }}) — {{ item.available ? 'Available' : 'Checked Out' }}</li>
+      }
+    </ul>
+  </section>
+</div>

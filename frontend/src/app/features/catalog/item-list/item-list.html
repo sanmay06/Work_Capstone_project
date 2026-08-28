@@ -1,0 +1,26 @@
+<h2>Item Catalog</h2>
+<p class="sub">Browse what is currently available for lending.</p>
+
+@if (loading()) {
+  <p>Loading...</p>
+} @else if (errorMessage()) {
+  <p class="error">{{ errorMessage() }}</p>
+} @else if (items().length === 0) {
+  <p>No items in the catalog yet.</p>
+} @else {
+  <div class="grid">
+    @for (item of items(); track item.id) {
+      <div class="card">
+        <div class="head">
+          <h3>{{ item.name }}</h3>
+          <span class="status" [class]="item.available ? 'available' : 'checked_out'">{{ item.available ? 'Available' : 'Checked Out' }}</span>
+        </div>
+        <p>{{ item.description || 'No description' }}</p>
+        <div class="meta">
+          <span>Asset</span>
+          <strong>{{ item.assetTag }}</strong>
+        </div>
+      </div>
+    }
+  </div>
+}

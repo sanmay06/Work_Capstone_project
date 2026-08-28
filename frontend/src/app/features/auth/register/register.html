@@ -1,0 +1,45 @@
+<div class="register-card">
+  <h2>Create an account</h2>
+  <form #registerForm="ngForm" (ngSubmit)="onSubmit()">
+    <label>
+      Name
+      <input type="text" [(ngModel)]="name" name="name" required minlength="2" maxlength="100" pattern="^[a-zA-Z][a-zA-Z '-]*$" #nameField="ngModel">
+      @if (nameField.invalid && nameField.touched) {
+        <span class="field-error">Name must be 2–100 letters (spaces, apostrophes, and hyphens allowed).</span>
+      }
+    </label>
+    <label>
+      Email
+      <input type="email" [(ngModel)]="email" name="email" required maxlength="150" #emailField="ngModel">
+      @if (emailField.invalid && emailField.touched) {
+        <span class="field-error">Enter a valid email address.</span>
+      }
+    </label>
+    <label>
+      Phone
+      <input type="text" [(ngModel)]="phone" name="phone" pattern="^\+?[0-9]{7,15}$" maxlength="16" #phoneField="ngModel">
+      @if (phoneField.invalid && phoneField.touched) {
+        <span class="field-error">Phone must be 7-15 digits, optionally starting with +.</span>
+      }
+    </label>
+    <label>
+      Address
+      <input type="text" [(ngModel)]="address" name="address" maxlength="255">
+    </label>
+    <label>
+      Password
+      <input type="password" [(ngModel)]="password" name="password" required minlength="6" maxlength="100" #passwordField="ngModel">
+      @if (passwordField.invalid && passwordField.touched) {
+        <span class="field-error">Password must be at least 6 characters.</span>
+      }
+    </label>
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+    @if (successMessage()) {
+      <p class="success">{{ successMessage() }}</p>
+    }
+    <button type="submit" [disabled]="registerForm.invalid">Create account</button>
+  </form>
+  <p class="hint">Already have an account? <a routerLink="/login">Log in</a></p>
+</div>

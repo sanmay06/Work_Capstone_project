@@ -1,0 +1,30 @@
+<nav class="navbar">
+  <div class="brand-wrap">
+  <span class="brand-dot"></span>
+  <div class="brand-block">
+    <span class="brand">Equipment Lending Library</span>
+    <span class="tagline">Check out gear. Bring it back.</span>
+  </div>
+</div>
+  <div class="links">
+    @if (auth.isLoggedIn()) {
+      <a routerLink="/items">Catalog</a>
+      <a routerLink="/reservations">My Reservations</a>
+      <a routerLink="/fines">My Fines</a>
+      @if (auth.isStaffOrAdmin()) {
+        <a routerLink="/staff/checkout">Checkout/Return</a>
+      }
+      @if (auth.isAdmin()) {
+        <a routerLink="/admin/catalog">Manage Catalog</a>
+      }
+      <span class="role">{{ auth.currentName() ?? '' }} ({{ auth.currentRole() }})</span>
+      <button (click)="logout()">Logout</button>
+    } @else {
+      <a routerLink="/login">Login</a>
+    }
+  </div>
+</nav>
+
+<main>
+  <router-outlet></router-outlet>
+</main>

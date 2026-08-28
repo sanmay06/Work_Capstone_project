@@ -1,0 +1,124 @@
+.sub {
+  margin-top: -0.4rem;
+  color: #5d758b;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #d8e5f2;
+  border-radius: 12px;
+  padding: 0.9rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 8px 22px rgba(39, 76, 114, 0.08);
+}
+
+form {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.inline-form {
+  gap: 0.45rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: #17324a;
+  font-size: 0.9rem;
+}
+
+input,
+select {
+  padding: 0.52rem 0.65rem;
+  border: 1px solid #bcd2e6;
+  border-radius: 10px;
+  background: #f8fbff;
+}
+
+.panel button {
+  width: fit-content;
+  margin-top: 0.25rem;
+  padding: 0.4rem 0.9rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #2f78c8, #18589d);
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.secondary {
+  background: #7e99b6 !important;
+}
+
+.list { list-style: none; padding: 0; }
+.list li {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #d8e5f2;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 8px 22px rgba(39, 76, 114, 0.08);
+}
+
+.item {
+  font-weight: 700;
+}
+
+.date {
+  color: #5b7286;
+}
+.status {
+  font-size: 0.74rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: #edf2f7;
+  font-weight: 700;
+}
+.status.approved { background: #ddf7e6; color: #1d6b3d; }
+.status.pending { background: #fff4d6; color: #8a5a11; }
+.status.cancelled, .status.declined { background: #ffe0dd; color: #9e2f2f; }
+button {
+  margin-left: auto;
+  padding: 0.38rem 0.74rem;
+  border: none;
+  border-radius: 10px;
+  background: #d45147;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.row-actions {
+  margin-left: auto;
+}
+
+.row-actions button {
+  margin-left: 0;
+}
+
+.success {
+  color: #1d6b3d;
+  background: #ddf7e6;
+  border: 1px solid #c6ead3;
+  border-radius: 9px;
+  padding: 0.4rem 0.55rem;
+}
+
+.error {
+  color: #9e2f2f;
+  background: #ffe0dd;
+  border: 1px solid #ffc5c0;
+  border-radius: 9px;
+  padding: 0.4rem 0.55rem;
+}

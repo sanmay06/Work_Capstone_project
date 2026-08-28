@@ -1,0 +1,102 @@
+<h2>My Reservations</h2>
+<p class="sub">Track your upcoming reservations and cancel pending requests.</p>
+
+@if (isMember && memberId) {
+  <section class="panel">
+    <h3>New Reservation</h3>
+    <form (ngSubmit)="submitReservation()">
+      <label>
+        Item
+        <select [(ngModel)]="itemId" name="itemId" required>
+          <option value="" disabled>Select available item</option>
+          @for (item of items(); track item.id) {
+            <option [value]="item.id">{{ item.name }} ({{ item.assetTag }})</option>
+          }
+        </select>
+      </label>
+
+      @if (items().length === 0) {
+        <p class="error">No reservable items are currently available.</p>
+      }
+
+      <label>
+        Start Date
+        <input type="date" [(ngModel)]="startDate" name="startDate" required>
+      </label>
+
+      <label>
+        End Date
+        <input type="date" [(ngModel)]="endDate" name="endDate" required>
+      </label>
+
+      <button type="submit">Reserve Item</button>
+    </form>
+
+    @if (submitMessage()) {
+      <p class="success">{{ submitMessage() }}</p>
+    }
+
+    @if (submitError()) {
+      <p class="error">{{ submitError() }}</p>
+    }
+  </section>
+} @else if (isMember) {
+  <p class="error">No member session found. Please log in as a member to create reservations.</p>
+}
+
+@if (isMember && loading()) {
+  <p>Loading...</p>
+} @else if (isMember && reservations().length === 0) {
+  <p>You have no reservations yet.</p>
+} @else if (isMember) {
+  <ul class="list">
+    @for (r of reservations(); track r.id) {
+      <li>
+        <span class="item">{{ r.item.name }}</span>
+        <span class="date">{{ r.startDate }} to {{ r.endDate }}</span>
+        <span class="status" [class]="r.status.toLowerCase()">{{ r.status }}</span>
+        @if (r.status === 'PENDING' || r.status === 'APPROVED') {
+          <button (click)="cancel(r.id)">Cancel</button>
+        }
+      </li>
+    }
+  </ul>
+}
+
+@if (isStaffOrAdmin) {
+  <section class="panel">
+    <h3>Reservation Review</h3>
+    <p class="sub">Approve or decline directly from each pending reservation.</p>
+    <button class="secondary" type="button" (click)="loadReviewReservations()">Refresh List</button>
+
+    @if (reviewMessage()) {
+      <p class="success">{{ reviewMessage() }}</p>
+    }
+
+    @if (reviewError()) {
+      <p class="error">{{ reviewError() }}</p>
+    }
+
+    @if (reviewLoading()) {
+      <p>Loading reservations...</p>
+    } @else if (reviewReservations().length === 0) {
+      <p>No reservations to review.</p>
+    } @else {
+      <ul class="list">
+        @for (r of reviewReservations(); track r.id) {
+          <li>
+            <span class="item">{{ r.item.name }}</span>
+            <span class="date">{{ r.member.name }} - {{ r.startDate }} to {{ r.endDate }}</span>
+            <span class="status" [class]="r.status.toLowerCase()">{{ r.status }}</span>
+            @if (r.status === 'PENDING') {
+              <div class="actions row-actions">
+                <button (click)="approve(r.id)">Approve</button>
+                <button class="secondary" (click)="decline(r.id)">Decline</button>
+              </div>
+            }
+          </li>
+        }
+      </ul>
+    }
+  </section>
+}

@@ -1,0 +1,93 @@
+<h2>Staff - Checkout / Return</h2>
+<p class="sub">Issue loans, process returns, and monitor overdue activity from one place.</p>
+
+<div class="panel">
+  <h3>Checkout Item</h3>
+  @if (members().length > 0) {
+    <label>
+      Member
+      <select [(ngModel)]="memberId" name="memberId" required>
+        <option value="" disabled>Select a member</option>
+        @for (member of members(); track member.id) {
+          <option [value]="member.id">{{ member.name }} ({{ member.email }})</option>
+        }
+      </select>
+    </label>
+  } @else {
+    <label>
+      Member ID
+      <input [(ngModel)]="memberId" name="memberId" placeholder="Enter member UUID">
+    </label>
+  }
+  <label>
+    Item
+    <select [(ngModel)]="itemId" name="itemId" required>
+      <option value="" disabled>Select an item</option>
+      @for (item of items(); track item.id) {
+        <option [value]="item.id">{{ item.name }} ({{ item.assetTag }}) - {{ item.available ? 'Available' : 'Checked Out' }}</option>
+      }
+    </select>
+  </label>
+  <label>
+    Loan Duration (days)
+    <input type="number" [(ngModel)]="loanDurationDays" name="loanDurationDays" min="1">
+  </label>
+  <button (click)="submitCheckout()" [disabled]="!itemId || !memberId">Checkout</button>
+  @if (checkoutResult()) { <p class="success">{{ checkoutResult() }}</p> }
+  @if (checkoutError()) { <p class="error">{{ checkoutError() }}</p> }
+</div>
+
+<div class="panel">
+  <h3>Return Item</h3>
+  @if (activeLoans().length > 0) {
+    <label>
+      Select Loan to Return
+      <select [(ngModel)]="returnLoanId" name="returnLoanId">
+        <option value="" disabled>Select a loan</option>
+        @for (loan of activeLoans(); track loan.id) {
+          <option [value]="loan.id">{{ loan.item.name }} — {{ loan.member.name }} (due {{ loan.dueDate }})</option>
+        }
+      </select>
+    </label>
+  } @else {
+    <label>Loan ID <input [(ngModel)]="returnLoanId" name="returnLoanId" placeholder="Paste loan UUID"></label>
+  }
+  <label>
+    Condition at Return
+    <select [(ngModel)]="conditionAtReturn" name="conditionAtReturn">
+      <option>GOOD</option>
+      <option>FAIR</option>
+      <option>DAMAGED</option>
+    </select>
+  </label>
+  <button (click)="submitReturn()" [disabled]="!returnLoanId">Return Item</button>
+  @if (returnResult()) { <p class="success">{{ returnResult() }}</p> }
+  @if (returnError()) { <p class="error">{{ returnError() }}</p> }
+</div>
+
+<div class="panel wide">
+  <h3>Active Loans</h3>
+  @if (loansLoading()) {
+    <p>Loading...</p>
+  } @else if (activeLoans().length === 0) {
+    <p>No active loans.</p>
+  } @else {
+    <table>
+      <thead>
+        <tr><th>Loan ID</th><th>Member</th><th>Item</th><th>Checked Out</th><th>Due</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        @for (loan of activeLoans(); track loan.id) {
+          <tr>
+            <td title="{{ loan.id }}">{{ loan.id.slice(0, 8) }}...</td>
+            <td>{{ loan.member.name }}</td>
+            <td>{{ loan.item.name }}</td>
+            <td>{{ loan.checkoutDate }}</td>
+            <td>{{ loan.dueDate }}</td>
+            <td>{{ loan.status }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
