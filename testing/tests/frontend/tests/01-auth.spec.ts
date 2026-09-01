@@ -76,4 +76,76 @@ test.describe('Suite 01: Authentication & User Onboarding', () => {
     expect(storedToken).toBeNull();
   });
 
+  test('1.6 Empty required login fields remain on the login page and show an auth error', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    await loginPage.goto();
+
+    await expect(page).toHaveURL(/\/login$/);
+    await loginPage.submitButton.click();
+    await expect(page).toHaveURL(/\/login$/);
+    await expect(loginPage.errorMessage).toBeVisible();
+
+    await loginPage.emailInput.fill('admin@example.com');
+    await loginPage.submitButton.click();
+    await expect(page).toHaveURL(/\/login$/);
+    await expect(loginPage.errorMessage).toContainText('Invalid email or password');
+  });
+
+  test('1.7 Registration form surfaces validation errors at the boundary values', async ({ page }) => {
+    const registerPage = new RegisterPage(page);
+    await registerPage.goto();
+
+    await registerPage.nameInput.fill('A');
+    await registerPage.nameInput.blur();
+    await expect(registerPage.fieldErrorMessages).toContainText('Name must be 2–100 letters');
+
+    await registerPage.nameInput.fill('A'.repeat(101));
+    await registerPage.nameInput.blur();
+    await expect(registerPage.fieldErrorMessages).toContainText('Name must be 2–100 letters');
+
+    await registerPage.phoneInput.fill('123456');
+    await registerPage.phoneInput.blur();
+    await expect(registerPage.fieldErrorMessages).toContainText('Phone must be 7-15 digits');
+
+    await registerPage.passwordInput.fill('12345');
+    await registerPage.passwordInput.blur();
+    await expect(registerPage.fieldErrorMessages).toContainText('at least 6 characters');
+  });
+
+  test('1.8 Duplicate registration shows a friendly error and stays on the register page', async ({ page }) => {
+    const registerPage = new RegisterPage(page);
+    await registerPage.goto();
+
+    const duplicateEmail = generateRandomEmail('duplicate');
+    const payload = {
+      name: 'Duplicate Account',
+      email: duplicateEmail,
+      phone: '+15550002222',
+      address: 'Duplication Street',
+      password: 'password123',
+    };
+
+    await registerPage.register(payload);
+    await expect(registerPage.successMessage).toContainText('Account created');
+
+    await page.goto('/register');
+    await registerPage.register(payload);
+    await expect(registerPage.errorMessage).toBeVisible();
+    await expect(page).toHaveURL(/\/register$/);
+  });
+
+  test('1.9 Logging out blocks protected routes until the user signs back in', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    await loginPage.goto();
+    await loginPage.login(SEEDED_ADMIN.email, SEEDED_ADMIN.password);
+    await expect(page).toHaveURL(/\/items$/);
+
+    await loginPage.logout();
+    await expect(page).toHaveURL(/\/login$/);
+
+    await page.goto('/items');
+    await expect(page).toHaveURL(/\/login$/);
+    await expect(loginPage.loginLink).toBeVisible();
+  });
+
 });

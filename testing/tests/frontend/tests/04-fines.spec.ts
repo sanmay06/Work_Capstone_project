@@ -14,9 +14,11 @@ test.describe('Suite 04: Fines Management', () => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
     await loginPage.login(SEEDED_ADMIN.email, SEEDED_ADMIN.password);
+    await expect(page).toHaveURL(/\/items$/);
 
     const finePage = new FinePage(page);
     await finePage.goto();
+    await expect(page).toHaveURL(/\/fines$/);
     await expect(finePage.pageTitle).toBeVisible();
 
     const isListVisible = await finePage.finesList.isVisible().catch(() => false);

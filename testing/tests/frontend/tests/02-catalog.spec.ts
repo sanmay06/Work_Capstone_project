@@ -14,12 +14,11 @@ test.describe('Suite 02: Item Catalog Browsing', () => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
     await loginPage.login(SEEDED_ADMIN.email, SEEDED_ADMIN.password);
+    await expect(page).toHaveURL(/\/items$/);
 
     const catalogPage = new CatalogPage(page);
-    await catalogPage.goto();
     await expect(catalogPage.pageTitle).toBeVisible();
 
-    // Verify either item cards or empty message is cleanly rendered
     const isGridVisible = await catalogPage.itemCards.first().isVisible().catch(() => false);
     const isEmptyVisible = await catalogPage.emptyMessage.isVisible().catch(() => false);
     expect(isGridVisible || isEmptyVisible).toBe(true);
