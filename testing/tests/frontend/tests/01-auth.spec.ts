@@ -31,6 +31,7 @@ test.describe('Suite 01: Authentication & User Onboarding', () => {
     await registerPage.phoneInput.fill('invalid-phone-abc');
     await registerPage.phoneInput.blur();
     await expect(registerPage.fieldErrorMessages).toContainText('Phone must be 7-15 digits');
+    await registerPage.phoneInput.fill('+15551234567'); // valid phone number
 
     // Short password
     await registerPage.passwordInput.fill('123');

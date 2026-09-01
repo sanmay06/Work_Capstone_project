@@ -10,6 +10,8 @@ playwright-report/
 test-results/
 blob-report/
 
+/data
+
 # Java & Maven Build
 target/
 *.class
